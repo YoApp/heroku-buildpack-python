@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# This script serves as the Pylibmc build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled libmemcached binary.
+VENDORED_TWEMPROXY="https://justyo-co.s3.amazonaws.com/public/binaries/$STACK/nutcracker.tar.gz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+bpwatch start twemproxy_install
+
+
+if [ -f ".heroku/vendor/nutcracker" ]; then
+  export TWEMPROXY=$(pwd)/vendor
+else
+  echo "-----> Bootstrapping Twemproxy."
+  mkdir -p .heroku/vendor
+  # Download and extract twemproxy into target vendor directory.
+  curl $VENDORED_TWEMPROXY -s | tar zxv -C .heroku/vendor &> /dev/null
+
+  export TWEMPROXY=$(pwd)/vendor
+fi
+
+bpwatch stop pylibmc_install

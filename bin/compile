@@ -157,6 +157,9 @@ source $BIN_DIR/steps/setuptools
 # Uninstall removed dependencies with Pip.
 source $BIN_DIR/steps/pip-uninstall
 
+# Install Twemproxy.
+source $BIN_DIR/steps/twemproxy
+
 # Mercurial support.
 source $BIN_DIR/steps/mercurial
 

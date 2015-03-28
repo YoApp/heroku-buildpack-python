@@ -29,4 +29,4 @@ else
   export TWEMPROXY=$(pwd)/vendor
 fi
 
-bpwatch stop pylibmc_install
+bpwatch stop twemproxy_install

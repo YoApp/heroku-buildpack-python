@@ -18,15 +18,20 @@ source $BIN_DIR/utils
 bpwatch start twemproxy_install
 
 
-if [ -f ".heroku/vendor/nutcracker" ]; then
-  export TWEMPROXY=$(pwd)/vendor
+if [ -f ".heroku/vendor/bin/nutcracker" ]; then
+  export TWEMPROXY=$(pwd)/vendor/bin
 else
   echo "-----> Bootstrapping Twemproxy."
-  mkdir -p .heroku/vendor
+  mkdir -p .heroku/vendor/bin
   # Download and extract twemproxy into target vendor directory.
-  curl $VENDORED_TWEMPROXY -s | tar zxv -C .heroku/vendor &> /dev/null
+  curl $VENDORED_TWEMPROXY -s | tar zxv -C .heroku/vendor/bin &> /dev/null
 
-  export TWEMPROXY=$(pwd)/vendor
+    if [[ $? != 0 ]] ; then
+      puts-warn "Requested twem proxy is not available for this stack ($STACK)."
+      puts-warn "Aborting."
+      exit 1
+    fi
+  export TWEMPROXY=$(pwd)/vendor/bin
 fi
 
 bpwatch stop twemproxy_install

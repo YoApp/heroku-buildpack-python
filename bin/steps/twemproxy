@@ -19,6 +19,7 @@ bpwatch start twemproxy_install
 
 
 if [ -f ".heroku/vendor/bin/nutcracker" ]; then
+  echo "-----> Bootstrapping Twemproxy."
   export TWEMPROXY=$(pwd)/vendor/bin
 else
   echo "-----> Bootstrapping Twemproxy."
